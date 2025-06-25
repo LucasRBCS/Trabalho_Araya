@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Vendas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gestão de Vendas</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('customers')">Clientes</a></li>
+                <li><a href="#" onclick="showSection('products')">Produtos</a></li>
+                <li><a href="#" onclick="showSection('sales')">Vendas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="customers" class="section-content active">
+            <h2>Gestão de Clientes</h2>
+            <form id="customerForm">
+                <input type="hidden" id="customerId">
+                <label for="customerName">Nome:</label>
+                <input type="text" id="customerName" required>
+                <label for="customerEmail">Email:</label>
+                <input type="email" id="customerEmail" required>
+                <label for="customerPhone">Telefone:</label>
+                <input type="text" id="customerPhone">
+                <button type="submit">Salvar Cliente</button>
+                <button type="button" onclick="clearCustomerForm()">Limpar</button>
+            </form>
+            <h3>Lista de Clientes</h3>
+            <ul id="customerList"></ul>
+        </section>
+
+        <section id="products" class="section-content">
+            <h2>Gestão de Produtos</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <label for="productName">Nome:</label>
+                <input type="text" id="productName" required>
+                <label for="productDescription">Descrição:</label>
+                <textarea id="productDescription"></textarea>
+                <label for="productPrice">Preço:</label>
+                <input type="number" id="productPrice" step="0.01" required>
+                <label for="productStock">Estoque:</label>
+                <input type="number" id="productStock" required>
+                <button type="submit">Salvar Produto</button>
+                <button type="button" onclick="clearProductForm()">Limpar</button>
+            </form>
+            <h3>Lista de Produtos</h3>
+            <ul id="productList"></ul>
+        </section>
+
+        <section id="sales" class="section-content">
+            <h2>Registro de Vendas</h2>
+            <form id="saleForm">
+                <label for="saleCustomer">Cliente:</label>
+                <select id="saleCustomer" required></select>
+                <label for="saleProduct">Produto:</label>
+                <select id="saleProduct" required></select>
+                <label for="saleQuantity">Quantidade:</label>
+                <input type="number" id="saleQuantity" min="1" required>
+                <label for="salePaymentMethod">Método de Pagamento:</label>
+                <select id="salePaymentMethod" required>
+                    <option value="">Selecione</option>
+                    <option value="credit_card">Cartão de Crédito</option>
+                    <option value="debit_card">Cartão de Débito</option>
+                    <option value="cash">Dinheiro</option>
+                    <option value="pix">Pix</option>
+                </select>
+                <button type="submit">Registrar Venda</button>
+            </form>
+            <h3>Lista de Vendas</h3>
+            <ul id="saleList"></ul>
+        </section>
+    </main>
+
+    <script src="js/customers.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/sales.js"></script>
+    <script>
+        // Função para exibir a seção correta e esconder as outras
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            // Recarrega os dados da seção ao mudar, para garantir que estejam atualizados
+            if (sectionId === 'customers') fetchCustomers();
+            if (sectionId === 'products') fetchProducts();
+            if (sectionId === 'sales') {
+                fetchSales();
+                populateSaleForms(); // Popula os selects de cliente e produto para a venda
+            }
+        }
+
+        // Carrega a seção de clientes por padrão quando a página é carregada
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('customers');
+        });
+    </script>
+</body>
+</html>
